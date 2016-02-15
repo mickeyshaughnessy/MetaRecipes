@@ -5,6 +5,40 @@ code for metarecipe app
 
 [structured data testing tool](https://developers.google.com/structured-data/testing-tool/)
 
+* Look at ingredients for a bunch of recipes
+example: 'vegan banana bread', 'tri-tip', 'maple banana bread'
+
+input = base dish ([signature ingredients], dish type)
+eg, "banana bread"
+
+output = a meta-recipe, which includes basic recipe + variants 
+	on recipe return page, apply filters to basic recipe
+		filters = (cuisine, restrictions, cooking method, ingredients) 
+
+* Algorithm:
+	1. read query string.
+	2. return all matching recipes with score.
+	3. construct meta recipe.
+	4. Display meta recipe + variants.
+
+
+
+
+
+
+
+
+
+
+different taxonomies:
+	ingredients - meat, vegetable, flour, maple, banana, ... 
+	cooking method - roast, fry, slow cooker, no cook, bake, ...
+	dish type - casserole, bread, salad, meat, ...
+	cuisine - thai, italian, syrian, ...
+	restrictions - gluten-free, low-fat, kosher, vegan, vegetarian, ...	
+
+
+
 example recipe JSON LD
 ```
 <script type="application/ld+json">
