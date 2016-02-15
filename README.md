@@ -1,5 +1,5 @@
 # MetaRecipes
-Code for metarecipe app
+Code for metarecipe app :shit:
 
 Scrape public recipe and parses the recipe. 
 Group recipes by type.
