@@ -28,11 +28,11 @@ output = a meta-recipe, which includes basic recipe + variants
 	4. Display meta recipe + variants.
 
 ToDo:
--[ ]build database
--[ ]searching the database
--[ ]filtering the results
--[ ]REST API in front of it.
--[ ]front end for displaying the results
+- [ ] build database
+- [ ] searching the database
+- [ ] filtering the results
+- [ ] REST API in front of it.
+- [ ] front end for displaying the results
 
 
 
