@@ -1,5 +1,5 @@
 # MetaRecipes
-code for metarecipe app
+Code for metarecipe app
 
 Scrape public recipe and parses the recipe. 
 Group recipes by type.
