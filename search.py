@@ -1,16 +1,16 @@
 import sys 
 import gensim
 
-#model = gensim.models.Word2Vec()
-#sentences = gensim.models.word2vec.LineSentence('/data/text8')
-#print 'sentences loaded'
-#model.build_vocab(sentences)
-#print 'vocab built'
-#model.train(sentences)
-#print 'model trained'
-#model.save('text8_model')
+model = gensim.models.Word2Vec()
+sentences = gensim.models.word2vec.LineSentence('/data/text8')
+print 'sentences loaded'
+model.build_vocab(sentences)
+print 'vocab built'
+model.train(sentences)
+print 'model trained'
+model.save('text8_model')
 
-model = gensim.models.Word2Vec.load('/data/gensim_wiki_model')
+#model = gensim.models.Word2Vec.load('/data/gensim_wiki_model')
 
 print model.most_similar(positive=['woman', 'king'], negative=['man'])
 print model.most_similar(positive=['banana', 'bread'])
