@@ -1,6 +1,12 @@
 # MetaRecipes
 code for metarecipe app
 
+Scrape public recipe and parses the recipe. 
+Group recipes by type.
+Query recipes by type.
+identify base ingredients, variations, cooking method.
+
+
 [schema.org recipe object](https://schema.org/Recipe)
 
 [structured data testing tool](https://developers.google.com/structured-data/testing-tool/)
