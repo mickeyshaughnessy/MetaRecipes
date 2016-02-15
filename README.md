@@ -30,6 +30,7 @@ output = a meta-recipe, which includes basic recipe + variants
 ToDo:
 - [x] build database
 - [x] searching the database
+- [ ] combine recipes into meta recipe
 - [ ] filtering the results
 - [ ] REST API in front of it.
 - [ ] front end for displaying the results
