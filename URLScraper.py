@@ -12,19 +12,26 @@ import operator
 from lxml import etree
 
 def parse_url(url):
-	data = {'ingredients':[], 'recipeInstructions':[]}
-	with open('allrecipes.fields') as f:
-		for line in f.readlines():
-			data[line.strip()] = ''
+    data = {'ingredients':[], 'recipeInstructions':[]}
+    with open('allrecipes.fields') as f:
+        for line in f.readlines():
+            data[line.strip()] = ''
 	
-	opener = urllib2.build_opener()
-	opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36')]
-	scraped_page = opener.open(url).read()
-        soup = BeautifulSoup(scraped_page.decode('utf-8', 'ignore'), 'lxml')
-	
-	sections = soup.find_all("section")
-	recipe = [s for s in sections if s.get('itemtype') == 'http://schema.org/Recipe'][0]
-	for i in recipe.descendants:
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36')]
+    scraped_page = opener.open(url).read()
+    soup = BeautifulSoup(scraped_page.decode('utf-8', 'ignore'), 'lxml')	
+    #print soup
+    #### this works for allrecipes.com recipes ####
+    #sections = soup.find_all("section")
+    sections = soup.find_all("div")
+    
+    #### this works for norecipes.com recipes ####
+    #sections = soup.findall("section","div")
+
+    recipe = [s for s in sections if s.get('itemtype') == 'http://schema.org/Recipe'][0]	
+    #recipe = soup.children.findall(itemtype='http://schema.org/Recipe')
+    for i in recipe.descendants:
 		try:
 			prop = i.get('itemprop')
 			if prop in data.keys():
@@ -44,15 +51,18 @@ def parse_url(url):
 			pass
 	
 	#print dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
-	return data
+    return data
 
 if __name__ == '__main__':
-	db = []
-	with open('urls.text') as f:
-		for line in f.readlines():
-			print line
-			db.append(parse_url(line.strip()))
-        with open('db.json', 'w') as f:
-            for r in db:
-                f.write(dumps(r)+'\n')
+    db = []
+    if len(sys.argv) > 1:
+        print parse_url(sys.argv[1])
+    else: 
+        with open('urls.text') as f:
+            for line in f.readlines():
+                print line
+                db.append(parse_url(line.strip()))
+            with open('db.json', 'w') as f:
+                for r in db:
+                    f.write(dumps(r)+'\n')
                 
