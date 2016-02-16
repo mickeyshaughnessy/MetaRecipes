@@ -21,7 +21,7 @@ def crawl(url):
     for m in matches:
         m = m.replace('"','')
         if m not in seen: 
-            with open('all_urls.txt', 'a') as f:
+            with open('all_urls2.txt', 'a') as f:
                 f.write(m+'\n')
             crawl(m)
 

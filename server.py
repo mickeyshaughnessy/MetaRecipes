@@ -5,8 +5,9 @@ from flask import Flask
 from flask import request, jsonify
 from json import loads, dumps
 import redis
+from config import *
 
-redis = redis.StrictRedis(host='localhost')
+redis = redis.StrictRedis(host=redis_hostname)
 
 def get_all_recipes():
     keys = redis.keys('*recipe#*')
@@ -49,4 +50,7 @@ def metasearch():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5004, debug=True)
+
+
+
 
