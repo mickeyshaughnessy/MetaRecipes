@@ -31,10 +31,10 @@ ToDo:
 - [x] build database
 - [x] searching the database
 - [ ] combine recipes into meta recipe
-- [ ] crawl for recipe urls
-- [ ] filtering the results
-- [ ] REST API in front of it.
+- [x] crawl for recipe urls
+- [x] REST API in front of it.
 - [ ] front end for displaying the results
+- [ ] filtering the results
 
 -----
 API Documentation
