@@ -36,7 +36,23 @@ ToDo:
 - [ ] REST API in front of it.
 - [ ] front end for displaying the results
 
+-----
+API Documentation
 
+All api calls should have the base url: `https://www.metarecipes.com/`
+
+`GET https://www.metarecipes.com/recipes/`:
+
+`GET https://www.metarecipes.com/recipes/<name>`:
+    returns the named recipe 
+
+for both of the `.../recipes/` endpoints, both base and meta recipes should be
+provided for SEO so that Google can crawl the meta recipes. 
+
+`POST data=searchstring  https://www.metarecipes.com/metasearch`:
+    returns a meta recipe (base + variants based on the search string)
+
+-------- 
 
 
 different taxonomies:
