@@ -36,8 +36,8 @@ ToDo:
 - [ ] front end for displaying the results
 - [ ] filtering the results
 
------
 API Documentation
+---------
 
 All api calls should have the base url: `https://www.metarecipes.com/`
 
@@ -54,7 +54,15 @@ provided for SEO so that Google can crawl the meta recipes.
 
 -------- 
 
+#Redis
+  Redis is a distributed, in-memory key-value store we use as the basic database for recipes.
+  A Redis server can be instantiated on the localhost by executing `redis-server` on the command line and leaving the window open.
+  On restart the server may need to be restarted.
+  To install:
+  `conda install redis`
+  `conda install redis-py`
 
+------------
 different taxonomies:
 	ingredients - meat, vegetable, flour, maple, banana, ... 
 	cooking method - roast, fry, slow cooker, no cook, bake, ...

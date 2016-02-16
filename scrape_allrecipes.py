@@ -62,6 +62,11 @@ if __name__ == '__main__':
             for line in f.readlines():
                 print line.strip()
                 data = parse_url(line.strip())
-                _id = hashlib.sha224(line.strip()+data['name']).hexdigest()
+                try:
+                    _id = hashlib.sha224(line.strip()+data['name']).hexdigest()
+                except:
+                    _id = hashlib.sha224(line.strip()).hexdigest()
+                with open('db.json', 'a') as f2:
+                    f2.write(dumps(data)+'\n')    
                 redis.set('recipe#'+_id, dumps(data))
                 

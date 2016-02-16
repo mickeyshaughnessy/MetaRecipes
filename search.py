@@ -25,6 +25,11 @@ def compute_match(search, recipe):
     result = p.findall((recipe['name'] + recipe['description']).lower()) 
     return len(result)
 
+    # alternate algorithm - compute similarity score between 
+    # 1. break seach string into words.
+    # 2. for each word in the string, compute
+
+
 if __name__ == '__main__':
     # argument is search string
     get_recipes(sys.argv[1])
