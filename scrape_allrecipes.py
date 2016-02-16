@@ -8,11 +8,15 @@ import sys
 import urllib2
 import unicodedata
 import operator
-#import xml.etree.ElementTree as ET
 from lxml import etree
+import redis
+from config import *
+import hashlib
+
+redis = redis.StrictRedis(host=redis_hostname)
 
 def parse_url(url):
-	data = {'ingredients':[], 'recipeInstructions':[]}
+	data = {'url':url, 'ingredients':[], 'recipeInstructions':[]}
 	with open('allrecipes.fields') as f:
 		for line in f.readlines():
 			data[line.strip()] = ''
@@ -47,12 +51,17 @@ def parse_url(url):
 	return data
 
 if __name__ == '__main__':
-	db = []
-	with open('urls.text') as f:
-		for line in f.readlines():
-			print line
-			db.append(parse_url(line.strip()))
-        with open('db.json', 'w') as f:
-            for r in db:
-                f.write(dumps(r)+'\n')
+    if len(sys.argv) == 1:
+        print 'Usage is `python scraper.py <url_file>`'
+        print 'The following keys are present in the redis:' 
+        print redis.keys('*recipe#*') 
+        
+    else:
+        db = []
+        with open(sys.argv[1]) as f:
+            for line in f.readlines():
+                print line.strip()
+                data = parse_url(line.strip())
+                _id = hashlib.sha224(line.strip()+data['name']).hexdigest()
+                redis.set('recipe#'+_id, dumps(data))
                 
