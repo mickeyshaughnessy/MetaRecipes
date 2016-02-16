@@ -22,7 +22,7 @@ def parse_url(url):
 	scraped_page = opener.open(url).read()
         soup = BeautifulSoup(scraped_page.decode('utf-8', 'ignore'), 'lxml')
 	
-	sections = soup.find_all("section")
+	sections = soup.find_all("div")
 	recipe = [s for s in sections if s.get('itemtype') == 'http://schema.org/Recipe'][0]
 	for i in recipe.descendants:
 		try:
@@ -48,11 +48,14 @@ def parse_url(url):
 
 if __name__ == '__main__':
 	db = []
-	with open('urls.text') as f:
-		for line in f.readlines():
-			print line
-			db.append(parse_url(line.strip()))
-        with open('db.json', 'w') as f:
-            for r in db:
-                f.write(dumps(r)+'\n')
+        if len(sys.argv) > 1:
+            parse_url(sys.argv[1])
+        else:
+	    with open('urls.text') as f:
+	    	for line in f.readlines():
+	    		print line
+	    		db.append(parse_url(line.strip()))
+            with open('db.json', 'w') as f:
+                for r in db:
+                    f.write(dumps(r)+'\n')
                 
