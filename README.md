@@ -21,6 +21,15 @@ output = a meta-recipe, which includes basic recipe + variants
 	on recipe return page, apply filters to basic recipe
 		filters = (cuisine, restrictions, cooking method, ingredients) 
 
+ToDo:
+- [x] build database
+- [x] searching the database
+- [ ] combine recipes into meta recipe
+- [x] crawl for recipe urls
+- [x] REST API in front of it.
+- [ ] front end for displaying the results
+- [ ] filtering the results
+
 * Algorithm:
 	1. read query string.
 	2. return all matching recipes with score.
@@ -62,14 +71,7 @@ output = a meta-recipe, which includes basic recipe + variants
 	
 		For each step in each recipe, project the step into the appropriate form eg - "Heat a lightly oiled griddle or frying pan over medium high heat" -- > Preheat: "<Heat><a lightly oiled griddle or frying pan><over medium high heat>". 
 		Then use the most common parts to construct the meta step strings, feed these through the grammar checker and use the top ranking one that passes.
-ToDo:
-- [x] build database
-- [x] searching the database
-- [ ] combine recipes into meta recipe
-- [x] crawl for recipe urls
-- [x] REST API in front of it.
-- [ ] front end for displaying the results
-- [ ] filtering the results
+
 
 API Documentation
 ---------
