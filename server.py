@@ -14,8 +14,9 @@ def get_all_recipes():
     return [redis.get(key) for key in keys]
 
 def get_recipe(path):
+    print(path)
     return redis.get(path)
- 
+     
 def get_meta(REQUEST):
     # get all matching recipes
     # run them through the filter:
