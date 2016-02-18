@@ -54,7 +54,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         print 'Usage is `python scraper.py <url_file>`'
         print 'The following keys are present in the redis:' 
-        print redis.keys('*recipe#*') 
+        print redis.keys('*recipe*') 
         
     else:
         db = []
@@ -68,5 +68,5 @@ if __name__ == '__main__':
                     _id = hashlib.sha224(line.strip()).hexdigest()
                 with open('db.json', 'a') as f2:
                     f2.write(dumps(data)+'\n')    
-                redis.set('recipe#'+_id, dumps(data))
+                redis.set('recipe'+_id, dumps(data))
                 
