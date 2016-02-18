@@ -13,7 +13,7 @@ from config import *
 
 redis = redis.StrictRedis(host=redis_hostname)
 
-def get_recipes(search):
+def get_meta(search):
     results = []
     for r in [redis.get(k) for k in redis.keys('*recipe*')]:
         r = loads(r)
@@ -39,4 +39,4 @@ def compute_match(search, recipe):
 
 if __name__ == '__main__':
     # argument is search string
-    get_recipes(sys.argv[1])
+    get_meta(sys.argv[1])

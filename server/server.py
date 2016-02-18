@@ -5,6 +5,7 @@ from flask import Flask
 from flask import request, jsonify
 from json import loads, dumps
 import redis
+from search import get_meta 
 
 import sys
 from os.path import abspath
@@ -15,20 +16,13 @@ from config import *
 redis = redis.StrictRedis(host=redis_hostname)
 
 def get_all_recipes():
-    keys = redis.keys('*recipe#*')
+    keys = redis.keys('*recipe*')
     return [redis.get(key) for key in keys]
 
 def get_recipe(path):
     print(path)
     return redis.get(path)
      
-def get_meta(REQUEST):
-    # get all matching recipes
-    # run them through the filter:
-        # common attributes go into base
-        # everything else goes into variants 
-    return 0
-    
 app = Flask(__name__)
 
 @app.route('/recipes/', methods=['GET'], defaults={'path':''})
