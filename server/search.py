@@ -14,17 +14,16 @@ from config import *
 redis = redis.StrictRedis(host=redis_hostname)
 
 def get_recipes(search):
-    print 'hello'
     results = []
     for r in [redis.get(k) for k in redis.keys('*recipe*')]:
-        print r
+        r = loads(r)
         score = compute_match(search, r)
         if score > 0:
             results.append((r, score))
     sorted_r = sorted(results, key=operator.itemgetter(1))
     sorted_r.reverse()
-    for r in sorted_r:
-        print r[0]['name']
+    for R in sorted_r:
+        print '%s Score: %s' % (R[0]['name'], R[1])
 
 def compute_match(search, recipe):
     # match the number of times the search string appears in the recipe
