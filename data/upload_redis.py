@@ -5,13 +5,17 @@ from bs4 import BeautifulSoup
 from json import loads, dumps
 from datetime import datetime as dt
 import sys
+from os.path import abspath
 import urllib2
 import unicodedata
 import operator
 from lxml import etree
 import redis
-from config import *
 import hashlib
+
+up = '/'.join(abspath(".").split('/')[:-1])
+sys.path.append(up)
+from config import *
 
 redis = redis.StrictRedis(host=redis_hostname)
 

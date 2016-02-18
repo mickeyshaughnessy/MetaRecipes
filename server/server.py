@@ -5,6 +5,11 @@ from flask import Flask
 from flask import request, jsonify
 from json import loads, dumps
 import redis
+
+import sys
+from os.path import abspath
+up = '/'.join(abspath(".").split('/')[:-1])
+sys.path.append(up)
 from config import *
 
 redis = redis.StrictRedis(host=redis_hostname)

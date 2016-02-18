@@ -3,13 +3,21 @@ from json import loads
 import operator
 import re
 import redis
+import sys
+from os.path import abspath
+up = '/'.join(abspath(".").split('/')[:-1])
+sys.path.append(up)
+from config import *
+
 from config import *
 
 redis = redis.StrictRedis(host=redis_hostname)
 
 def get_recipes(search):
+    print 'hello'
     results = []
     for r in [redis.get(k) for k in redis.keys('*recipe*')]:
+        print r
         score = compute_match(search, r)
         if score > 0:
             results.append((r, score))
