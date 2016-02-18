@@ -21,12 +21,6 @@ output = a meta-recipe, which includes basic recipe + variants
 	on recipe return page, apply filters to basic recipe
 		filters = (cuisine, restrictions, cooking method, ingredients) 
 
-* Algorithm:
-	1. read query string.
-	2. return all matching recipes with score.
-	3. construct meta recipe.
-	4. Display meta recipe + variants.
-
 ToDo:
 - [x] build database
 - [x] searching the database
@@ -35,6 +29,49 @@ ToDo:
 - [x] REST API in front of it.
 - [ ] front end for displaying the results
 - [ ] filtering the results
+
+* Algorithm:
+	1. read query string.
+	2. return all matching recipes with score.
+	3. construct meta recipe.
+	4. Display meta recipe + variants.
+	
+	Construct meta recipe algorithm:
+	1. Get distance from query string to all base recipes.
+	2. Construct meta ingredients.
+	3. Construct meta directions.
+	
+	Construct meta ingredients:
+	1. compute average ingredient list length.
+	2. fill meta ingredients list with the <avg_length> most common ingredients.
+	3. Use average amounts for meta ingredients amounts.
+	
+	Construct meta directions:
+		possible steps
+	* Preheat
+	* Mix1
+	* Mix2
+	* ...
+	* Cook1
+	* Cook2
+	* ...
+
+	Rules: For each recipe (once) step through directions.
+		For each direction, classify it as a step.
+			Preheat is usually first direction.
+			There can be one or more Mixes ('mix', 'combine', 'together', 'stir',...)
+			Cooks usually follow Mixes ('cook', 'heat', 'bake', 'boil', 'hot', 'heat', ...)
+
+	1. Construct meta direction template:
+	2. Determine avg number and sequence of each kind of step, ie treat each recipe step sequence as a string ("PreMixMixCookMixCookServe" = "PMMCMC"), and compute the sequence that is the smallest edit distance from all the others in the cluster.
+	3. Fill this each step in this sequence with the cluster average in the form:
+		* Preheat: "<verb><object><how>", eg "Preheat water boiling" or "Boil water (None)"
+		* Mix: "<combine><ing1><ing2>" eg "Mix eggs and vanilla" or "Rub salt and pepper and meat"
+		* Cook: "<verb><object><how>" eg "Bake (None) for 1 hour at 250F" or "Boil beans 20 minutes"
+	
+		For each step in each recipe, project the step into the appropriate form eg - "Heat a lightly oiled griddle or frying pan over medium high heat" -- > Preheat: "<Heat><a lightly oiled griddle or frying pan><over medium high heat>". 
+		Then use the most common parts to construct the meta step strings, feed these through the grammar checker and use the top ranking one that passes.
+
 
 API Documentation
 ---------
