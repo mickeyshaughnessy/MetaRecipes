@@ -1,25 +1,10 @@
 # MetaRecipes
 Code for metarecipe app :shit:
 
-Scrape public recipe and parses the recipe. 
-Group recipes by type.
-Query recipes by type.
-identify base ingredients, variations, cooking method.
-
-
 [schema.org recipe object](https://schema.org/Recipe)
 
 [structured data testing tool](https://developers.google.com/structured-data/testing-tool/)
 
-* Look at ingredients for a bunch of recipes
-example: 'vegan banana bread', 'tri-tip', 'maple banana bread'
-
-input = base dish ([signature ingredients], dish type)
-eg, "banana bread"
-
-output = a meta-recipe, which includes basic recipe + variants 
-	on recipe return page, apply filters to basic recipe
-		filters = (cuisine, restrictions, cooking method, ingredients) 
 
 ToDo:
 - [x] build database
@@ -30,22 +15,22 @@ ToDo:
 - [ ] front end for displaying the results
 - [ ] filtering the results
 
-* Algorithm:
-	1. read query string.
-	2. return all matching recipes with score.
-	3. construct meta recipe.
-	4. Display meta recipe + variants.
-	
-	Construct meta recipe algorithm:
-	1. Get distance from query string to all base recipes.
-	2. Construct meta ingredients.
-	3. Construct meta directions.
-	
-	Construct meta ingredients:
-	1. compute average ingredient list length.
-	2. fill meta ingredients list with the <avg_length> most common ingredients.
-	3. Use average amounts for meta ingredients amounts.
-	
+
+#Meta Recipe Algorithm:
+
+    The idea of the meta recipe is to return a set of meta-ingredients and a set of meta instructions for preparing a dish given a search string.
+
+    Input = search string
+
+    Output = list of ingredients and instructions.
+
+    0. Transform search string to extract filter terms.
+    1. For each recipe in the db, score it against the search string. The score is used to construct a exponentially weighted db average (see example).
+    2. Compute average ingredient list length, L_avg_.
+    3. Fill a ingredient list of length, L_avg_, with the most common ingredients, using serving number weighted avg amounts. 
+    4. Construct meta directions and return.
+    5. Establish new url endpoint with metarecipe corresponding to search string. 
+
 	Construct meta directions:
 		possible steps
 	* Preheat
@@ -93,13 +78,20 @@ provided for SEO so that Google can crawl the meta recipes.
 
 #Redis
   Redis is a distributed, in-memory key-value store we use as the basic database for recipes.
+  
   A Redis server can be instantiated on the localhost by executing `redis-server` on the command line and leaving the window open.
-  On restart the server may need to be restarted.
+
+  A running Redis is required for the recipe server to connect to. 
+
+  On laptop restart the server may need to be restarted.
+  
   To install:
   `conda install redis`
   `conda install redis-py`
 
 ------------
+
+#Notes
 different taxonomies:
 	ingredients - meat, vegetable, flour, maple, banana, ... 
 	cooking method - roast, fry, slow cooker, no cook, bake, ...
@@ -107,7 +99,21 @@ different taxonomies:
 	cuisine - thai, italian, syrian, ...
 	restrictions - gluten-free, low-fat, kosher, vegan, vegetarian, ...	
 
+Scrape public recipe and parses the recipe. 
+Group recipes by type.
+Query recipes by type.
+identify base ingredients, variations, cooking method.
 
+
+* Look at ingredients for a bunch of recipes
+example: 'vegan banana bread', 'tri-tip', 'maple banana bread'
+
+input = base dish ([signature ingredients], dish type)
+eg, "banana bread"
+
+output = a meta-recipe, which includes basic recipe + variants 
+	on recipe return page, apply filters to basic recipe
+		filters = (cuisine, restrictions, cooking method, ingredients) 
 
 example recipe JSON LD
 ```
