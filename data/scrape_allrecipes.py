@@ -4,12 +4,15 @@
 from bs4 import BeautifulSoup
 from json import loads, dumps
 from datetime import datetime as dt
-import sys
 import urllib2
 import unicodedata
 import operator
 from lxml import etree
 import redis
+import sys
+from os.path import abspath
+up = '/'.join(abspath(".").split('/')[:-1])
+sys.path.append(up)
 from config import *
 import hashlib
 

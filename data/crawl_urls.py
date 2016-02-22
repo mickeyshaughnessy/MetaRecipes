@@ -13,7 +13,6 @@ p = re.compile('"http://allrecipes\.com/recipe.*?"')
 
 def crawl(url):
     print url
-    #sleep(uniform(0.2,0.8))
     seen.append(url)
     r = requests.get(url)
     matches = p.findall(r.text)
@@ -21,7 +20,7 @@ def crawl(url):
     for m in matches:
         m = m.replace('"','')
         if m not in seen: 
-            with open('all_urls2.txt', 'a') as f:
+            with open('all_urls6.txt', 'a') as f:
                 f.write(m+'\n')
             crawl(m)
 
