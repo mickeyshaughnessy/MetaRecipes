@@ -10,12 +10,12 @@ sys.path.append(up)
 from config import *
 import gensim
 
-print 'loading model'
+#print 'loading model'
 #model = gensim.models.Word2Vec.load_word2vec_format('all_recipes.bin', binary=True)  # C binary format
-model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
+#model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
 #model = gensim.models.Word2Vec.load('/Users/michaelshaughnessy/Flourish/Taxonomy/data/en.model')
 #model = gensim.models.Word2Vec.load_word2vec_format('/Users/michaelshaughnessy/Flourish/Taxonomy/data/GoogleNews-vectors-negative300.bin', binary=True)  # C binary format
-print 'loaded model'
+#print 'loaded model'
 
 redis = redis.StrictRedis(host=redis_hostname)
 
@@ -32,57 +32,27 @@ def get_recipes(search):
     return sorted_r 
     
 def compute_match(search, recipe):
-    # match the number of times the search string appears in the recipe
-    # name and description fields (ignoring case) and return this number: 0 - inf
-    p = re.compile('('+search.lower()+')')
-    rstring = (recipe['name'] + ' ' + recipe['description'] + ' ' + ' '.join(recipe['recipeInstructions'])).lower()
-    hits = len(p.findall(rstring))
+    # scoring is this way:
+        # One or more of the search terms must appear in the recipe title.
+        # If both do, the score is doubled.
+        # The frequency of the search terms in the description and instructions determines the score.
+        # The body score is normalized by the length of the recipe body. 
+    pall = re.compile('('+search.lower()+')')
+    ps = [re.compile('('+s.lower()+')') for s in search.split(' ')]
+    rname = recipe['name'].lower()
+    rbody = (recipe['description'] + ' ' + ' '.join(recipe['recipeInstructions'])).lower() 
     
-    if hits > 0:
-       pass 
-    return hits
-
-def compute_score(search, recipe):
-    recipe = recipe['name'].split() + recipe['description'].split() + ['recipeInstructions'].split()
-    return 0
-
-
-def compute_distance(search, recipe):
-    # computes a distance between a recipe and a search string
-    # small distances are closer together
-
-    recipe = recipe['name'].split() + recipe['description'].split()
-    search.replace(' ','_')
-    search = search.lower()
-    if search in model.vocab:
-        targets = model.most_similar(positive=[search], negative=[])
+    name_score = sum([len(p.findall(rname)) for p in ps])
+    body_score = sum([len(p.findall(rbody)) for p in ps])
+    if len(pall.findall(rname)) > 0 and len(search.split(' ')) > 1:
+        name_score = name_score * 2
+    if name_score > 0:
+        body_score = body_score / float(len(rbody))     
+        return name_score + 100*body_score 
     else:
-        return 1000000 
-    d = len(recipe) * len(targets) 
-    for phrase in recipe:
-        phrase = phrase.lower()
-        for target in targets: 
-            if (phrase in model.vocab):
-                d -= model.similarity(target[0], phrase)
-    #d = d / len(recipe)
-    
-    return d
-    if d > 0:
-        return d
-    else:
-        return 200000000 
+        return 0
     
 if __name__ == '__main__':
-    # argument is search string
-    #for R in get_meta(sys.argv[1]):
-    #sims = []
-    #for R in get_meta(''):
-    #    sims.append((R['name'], compute_distance(sys.argv[1], R)))
-    #    sims.append((R['name'], compute_distance(sys.argv[1], R)))
-    #sorted_sims = sorted(sims, key=operator.itemgetter(1))
-    #for s in sorted_sims[:10]:
-    #    print s[0], s[1]
     for i, s in enumerate(get_recipes(sys.argv[1])):
         if i < 10:
-            print s[0]['name']
-        #raw_input() 
+            print s[0]['name'], s[1]
