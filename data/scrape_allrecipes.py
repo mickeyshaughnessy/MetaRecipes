@@ -62,8 +62,10 @@ if __name__ == '__main__':
     else:
         db = []
         with open(sys.argv[1]) as f:
+            url_count = 0
             for line in f.readlines():
-                print line.strip()
+                url_count += 1
+                print line.strip(), url_count
                 data = parse_url(line.strip())
                 try:
                     _id = hashlib.sha224(line.strip()+data['name']).hexdigest()
