@@ -10,12 +10,12 @@ sys.path.append(up)
 from config import *
 import gensim
 
-#print 'loading model'
+print 'loading model'
 #model = gensim.models.Word2Vec.load_word2vec_format('all_recipes.bin', binary=True)  # C binary format
-#model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
+model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
 #model = gensim.models.Word2Vec.load('/Users/michaelshaughnessy/Flourish/Taxonomy/data/en.model')
 #model = gensim.models.Word2Vec.load_word2vec_format('/Users/michaelshaughnessy/Flourish/Taxonomy/data/GoogleNews-vectors-negative300.bin', binary=True)  # C binary format
-#print 'loaded model'
+print 'loaded model'
 
 redis = redis.StrictRedis(host=redis_hostname)
 
@@ -30,7 +30,14 @@ def get_recipes(search):
     sorted_r = sorted(results, key=operator.itemgetter(1))
     sorted_r.reverse()
     return sorted_r 
-    
+
+def try_similarity(w1, w2):
+    try:
+        s = model.similarity(w1,w2)
+        return s
+    except:
+        return 0
+ 
 def compute_match(search, recipe):
     # scoring is this way:
         # One or more of the search terms must appear in the recipe title.
@@ -41,13 +48,17 @@ def compute_match(search, recipe):
     ps = [re.compile('('+s.lower()+')') for s in search.split(' ')]
     rname = recipe['name'].lower()
     rbody = (recipe['description'] + ' ' + ' '.join(recipe['recipeInstructions'])).lower() 
-    
+     
     name_score = sum([len(p.findall(rname)) for p in ps])
-    body_score = sum([len(p.findall(rbody)) for p in ps])
+    body_score = 0
+    #body_score = sum([model.similarity(, phrase)
+    #body_score = sum([len(p.findall(rbody)) for p in ps])
     if len(pall.findall(rname)) > 0 and len(search.split(' ')) > 1:
         name_score = name_score * 2
     if name_score > 0:
-        body_score = body_score / float(len(rbody))     
+        body_score = sum([sum([try_similarity(wsearch, wbody) for wsearch in search.split(' ')]) for wbody in rbody])
+        body_score = body_score / float(len(rbody))
+        #print recipe['name'], name_score, body_score 
         return name_score + 100*body_score 
     else:
         return 0
