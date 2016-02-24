@@ -35,6 +35,7 @@ def compound(words):
     map(words.remove, list(set(removes)))
     doubles = filter(lambda x: ' ' in x, words)
     map(words.remove, [s for s in singles if s in doubles and s in singles])
+    # remove non standard ingredients, too
     words = filter( lambda x: 
                     x in standard_ingreds or 
                     set(x.split(' ')) & standard_ingreds,
