@@ -1,11 +1,32 @@
 # This script takes a search string and produces a meta-recipe
 # in the schema.org format, suitable for display on a sweet web frontend.
 import sys
+import itertools
 from search import get_recipes
 from datetime import date
 import re
 import nltk
 import pattern
+from collections import defaultdict
+import operator
+from datetime import datetime as dt
+import time
+import pprint
+
+def compound(words):
+    # takes a list of words and reduces to compounds
+    # ie ['baking', 'soda', 'baking soda'] --> ['baking soda']
+    two_grams = [' '.join(phrase) for phrase in list(itertools.combinations(words,2))] 
+    three_grams = [' '.join(phrase) for phrase in list(itertools.combinations(words,3))] 
+    for t in three_grams:
+        t1, t2, t3 = t.split(' ')
+        if t in words and t1 in words and t2 in words and t3 in words:
+            map(words.remove, [t1,t2,t3]) 
+    for t in two_grams:
+        t1, t2 = t.split(' ')
+        if t in words and t1 in words and t2 in words:
+            map(words.remove, [t1,t2,t3]) 
+    return words
 
 def reduce_ingred(ingredient):
     ingredient = ingredient.lower()
@@ -13,7 +34,7 @@ def reduce_ingred(ingredient):
     
     # define unit strings
     units = [
-    'ounce', 'teaspoon', 'tsp', 'tablespoon', 'tbsp', 'cup', 'pinch', 'dash', 'pound', 'handful', 'kg', 'lb',
+    'ounce', 'teaspoon', 'tsp', 'tablespoon', 'tbsp', 'cup', 'pinch', 'dash', 'pound', 'handful', 'kg', 'lb', 'gallon',
     ]
     units += [pattern.en.pluralize(u) for u in units]
     units = set(units)
@@ -59,25 +80,63 @@ def reduce_ingred(ingredient):
     if quantity:
         quantity = float(quantity)
  
-    print ('%s - %s - %s') % (quantity, unit, ingredient) 
-    raw_input()
-    return quantity, unit, ingredient 
+    #print ('%s - %s - %s') % (quantity, unit, ingredient.split(',')[0]) 
+    #raw_input()
+    #return quantity, unit, ingredient.split(',')[0] 
+    return ingredient.split(',')[0] 
 
 def get_ingredients(recipes):
+    # extract raw ingredient lists from recipes
     ingredients = [[i for i in r[0]['ingredients']] for r in recipes]
-    #print ingredients
+    # flatten into a single list of raw ingredient strings
     ingredients = [i for sublist in ingredients for i in sublist]
-    #print ingredients
-    ingredients = map(reduce_ingred, ingredients) 
+    # extract the core ingredient string
+    ingredients = map(reduce_ingred, ingredients)
+    # reduce the ingredient strings to simple words and phrases 
+    #print 'pos tagging.....'
+    #t_0 = time.mktime(dt.now().timetuple())
+    #all_tags = map(nltk.pos_tag, [i.split() for i in ingredients]) 
+    #t_1 = time.mktime(dt.now().timetuple())
+    #print 'time elapsed for nltk tagger %s' % (t_1 - t_0) 
+    t_2 = time.mktime(dt.now().timetuple())
+    #print [i.split() for i in ingredients]
+    all_tags = map(pattern.en.tag, ingredients) 
+    t_3 = time.mktime(dt.now().timetuple())
+    #print 'time elapsed for pattern tagger %s' % (t_3 - t_2) 
+    all_words = [' '.join([w[0] for w in ing if w[1] in ['NN']]) for ing in all_tags]
+    all_tokes = [w for phrase in all_words for w in phrase.split(' ')] 
+    all_words += all_tokes
+    #print all_words
+    #print all_tokes
+    #raw_input()
+    #print all_words
+   
+    # count the basic words 
+    counts = defaultdict(int)
+    for w in all_words:
+        counts[w] += 1
+    #for i in ingredients:
+    #    #tags = nltk.pos_tag(nltk.Text(nltk.word_tokenize(i.lower()))) 
+    #    #tags = nltk.pos_tag(nltk.word_tokenize(i.lower()))
+    #    #print i.lower()
+    #    #raw_input()
+    #    #tags = nltk.pos_tag(i.lower().split())
+    #    for t in tags:
+    #        print t
+    #        if t[1] == 'NN': counts[t[0]] += 1
+    words_sorted = sorted(counts.items(), key=operator.itemgetter(1))
+    words_sorted.reverse()
+    #print words_sorted
     # assemble a list of all ingredients and amounts
     # sort list by occurences
-    # return list 
-    return ingredients 
+    # return list
+    #words_sorted = compound([w[0] for w in words_sorted[:30] if w[0]) 
+    return(compound([w[0] for w in words_sorted[:30] if w[0]])) 
 
 def make_meta(searchs):
     recipes = get_recipes(searchs)
-    print recipes[-5]
-    rnames = ''
+    #print recipes[-5]
+    rnames = [r[0]['name'] for r in recipes]
     metar = {
         '@type': 'Recipe',
         'author': 'Metarecipes',
@@ -96,4 +155,4 @@ def make_meta(searchs):
 
 
 if __name__ == '__main__':
-    print make_meta(sys.argv[1])
+    pprint.PrettyPrinter(indent=4).pprint(make_meta(sys.argv[1]))

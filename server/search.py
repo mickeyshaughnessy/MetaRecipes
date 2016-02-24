@@ -9,13 +9,14 @@ up = '/'.join(abspath(".").split('/')[:-1])
 sys.path.append(up)
 from config import *
 import gensim
+import pattern
 
-print 'loading model'
+#print 'loading model'
 #model = gensim.models.Word2Vec.load_word2vec_format('all_recipes.bin', binary=True)  # C binary format
 model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
 #model = gensim.models.Word2Vec.load('/Users/michaelshaughnessy/Flourish/Taxonomy/data/en.model')
 #model = gensim.models.Word2Vec.load_word2vec_format('/Users/michaelshaughnessy/Flourish/Taxonomy/data/GoogleNews-vectors-negative300.bin', binary=True)  # C binary format
-print 'loaded model'
+#print 'loaded model'
 
 redis = redis.StrictRedis(host=redis_hostname)
 
@@ -29,7 +30,8 @@ def get_recipes(search):
             results.append((r, score))
     sorted_r = sorted(results, key=operator.itemgetter(1))
     sorted_r.reverse()
-    return sorted_r 
+    i = min(len(sorted_r), 10)
+    return sorted_r[:i] 
 
 def try_similarity(w1, w2):
     try:
@@ -46,6 +48,12 @@ def compute_match(search, recipe):
         # The body score is normalized by the length of the recipe body. 
     pall = re.compile('('+search.lower()+')')
     ps = [re.compile('('+s.lower()+')') for s in search.split(' ')]
+    #### This section to handle pluralization isn't quite working
+    #if s.lower()[-1] == 's':
+    #    ps2 = [re.compile('('+pattern.en.singularize(s.lower())+')') for s in search.split(' ')]
+    #else:
+    #    ps2 = [re.compile('('+pattern.en.pluralize(s.lower())+')') for s in search.split(' ')]
+    #ps = ps1 + ps2
     rname = recipe['name'].lower()
     rbody = (recipe['description'] + ' ' + ' '.join(recipe['recipeInstructions'])).lower() 
      
