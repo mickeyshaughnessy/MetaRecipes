@@ -10,12 +10,12 @@ sys.path.append(up)
 from config import *
 import gensim
 import pattern
-from pattern.en import singularize
+from pattern.en import singularize, wordnet
 
 
 #print 'loading model'
 #model = gensim.models.Word2Vec.load_word2vec_format('all_recipes.bin', binary=True)  # C binary format
-model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
+#model = gensim.models.Word2Vec.load_word2vec_format('text8.bin', binary=True)  # C binary format
 #model = gensim.models.Word2Vec.load('/Users/michaelshaughnessy/Flourish/Taxonomy/data/en.model')
 #model = gensim.models.Word2Vec.load_word2vec_format('/Users/michaelshaughnessy/Flourish/Taxonomy/data/GoogleNews-vectors-negative300.bin', binary=True)  # C binary format
 #print 'loaded model'
@@ -37,7 +37,7 @@ def get_recipes(search):
 
 def try_similarity(w1, w2):
     try:
-        s = model.similarity(w1,w2)
+        s = wordnet.similarity(w1,w2)
         return s
     except:
         return 0
