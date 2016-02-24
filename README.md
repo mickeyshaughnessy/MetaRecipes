@@ -10,6 +10,8 @@ ToDo:
 - [x] build database
 - [x] searching the database
 - [ ] combine recipes into meta recipe
+- [ ] remove dupicates like 'vanilla' and 'vanilla extract' from ingredients list
+- [ ] make ingredients list of length = avg length of ingredients returned
 - [x] crawl for recipe urls
 - [x] REST API in front of it.
 - [ ] front end for displaying the results
