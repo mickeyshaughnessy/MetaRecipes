@@ -10,6 +10,8 @@ sys.path.append(up)
 from config import *
 import gensim
 import pattern
+from pattern.en import singularize
+
 
 #print 'loading model'
 #model = gensim.models.Word2Vec.load_word2vec_format('all_recipes.bin', binary=True)  # C binary format
@@ -41,6 +43,7 @@ def try_similarity(w1, w2):
         return 0
  
 def compute_match(search, recipe):
+    
     # scoring is this way:
         # One or more of the search terms must appear in the recipe title.
         # If both do, the score is doubled.
