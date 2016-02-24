@@ -13,19 +13,32 @@ from datetime import datetime as dt
 import time
 import pprint
 
+with open('standard_ingredients.txt') as f:
+    standard_ingreds = f.readlines()
+    standard_ingreds = set([s.rstrip() for s in standard_ingreds])
+ 
 def compound(words):
     # takes a list of words and reduces to compounds
     # ie ['baking', 'soda', 'baking soda'] --> ['baking soda']
-    two_grams = [' '.join(phrase) for phrase in list(itertools.combinations(words,2))] 
-    three_grams = [' '.join(phrase) for phrase in list(itertools.combinations(words,3))] 
+    singles = filter(lambda x: ' ' not in x, words)
+    two_grams = [' '.join(phrase) for phrase in list(itertools.combinations(singles,2))] 
+    three_grams = [' '.join(phrase) for phrase in list(itertools.combinations(singles,3))]
+    removes = [] 
     for t in three_grams:
-        t1, t2, t3 = t.split(' ')
-        if t in words and t1 in words and t2 in words and t3 in words:
-            map(words.remove, [t1,t2,t3]) 
+        t1, t2, t3 = t.split(' ')[:3]
+        if t in words: 
+            map(removes.append, [t1,t2,t3])
     for t in two_grams:
         t1, t2 = t.split(' ')
-        if t in words and t1 in words and t2 in words:
-            map(words.remove, [t1,t2,t3]) 
+        if t in words: 
+            map(removes.append, [t1,t2])
+    map(words.remove, list(set(removes)))
+    doubles = filter(lambda x: ' ' in x, words)
+    map(words.remove, [s for s in singles if s in doubles and s in singles])
+    words = filter( lambda x: 
+                    x in standard_ingreds or 
+                    set(x.split(' ')) & standard_ingreds,
+                    words ) 
     return words
 
 def reduce_ingred(ingredient):
