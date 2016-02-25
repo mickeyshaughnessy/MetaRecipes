@@ -106,6 +106,8 @@ def get_ingredients(recipes):
     ingredients = [i for sublist in ingredients for i in sublist]
     # extract the core ingredient string
     ingredients = map(reduce_ingred, ingredients)
+    print ingredients
+    raw_input()
     # reduce the ingredient strings to simple words and phrases 
     #print 'pos tagging.....'
     #t_0 = time.mktime(dt.now().timetuple())
@@ -117,7 +119,7 @@ def get_ingredients(recipes):
     all_tags = map(pattern.en.tag, ingredients) 
     t_3 = time.mktime(dt.now().timetuple())
     #print 'time elapsed for pattern tagger %s' % (t_3 - t_2) 
-    all_words = [' '.join([w[0] for w in ing if w[1] in ['NN']]) for ing in all_tags]
+    all_words = [' '.join([w[0] for w in ing if w[1] in ['NN', 'NNS']]) for ing in all_tags]
     all_tokes = [w for phrase in all_words for w in phrase.split(' ')] 
     all_words += all_tokes
     #print all_words
@@ -129,6 +131,8 @@ def get_ingredients(recipes):
     counts = defaultdict(int)
     for w in all_words:
         counts[w] += 1
+    print counts
+    raw_input()
     #for i in ingredients:
     #    #tags = nltk.pos_tag(nltk.Text(nltk.word_tokenize(i.lower()))) 
     #    #tags = nltk.pos_tag(nltk.word_tokenize(i.lower()))
