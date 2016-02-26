@@ -67,12 +67,9 @@ def reduce_ingred(ingredient):
         unit1 = unit[0]
         ingredient = ingredient.replace(unit1, '')
     
-    #e = 'None' # pop the first other unit
+    # remove all units from ingredient string
     for e in units & set(ingredient.split(' ')):
         ingredient = ingredient.replace(e, '') 
-        #break
-        #unit2 = e
-        #ingredient = ingredient.replace(unit2, '') 
     
     if len(unit) > 0 and unit2: # if both are there, put them together
         unit = unit1 + ' ' + unit2
@@ -130,39 +127,19 @@ def get_ingredients(recipes):
     all_words = [' '.join([w[0] for w in ing if w[1] in ['NN', 'NNS']]) for ing in all_tags]
     all_tokes = [w for phrase in all_words for w in phrase.split(' ')] 
     all_words += all_tokes
-    #print all_words
-    #print all_tokes
-    #raw_input()
-    #print all_words
    
     # count the basic words 
     counts = defaultdict(int)
     for w in all_words:
         counts[w] += 1
-    #for i in ingredients:
-    #    #tags = nltk.pos_tag(nltk.Text(nltk.word_tokenize(i.lower()))) 
-    #    #tags = nltk.pos_tag(nltk.word_tokenize(i.lower()))
-    #    #print i.lower()
-    #    #raw_input()
-    #    #tags = nltk.pos_tag(i.lower().split())
-    #    for t in tags:
-    #        print t
-    #        if t[1] == 'NN': counts[t[0]] += 1
     words_sorted = sorted(counts.items(), key=operator.itemgetter(1))
     words_sorted.reverse()
-    #print words_sorted
-    # assemble a list of all ingredients and amounts
-    # sort list by occurences
-    # return list
-    #words_sorted = compound([w[0] for w in words_sorted[:30] if w[0]) 
     return(compound([w[0] for w in words_sorted[:30] if w[0]])) 
 
 def make_meta(searchs):
     recipes = get_recipes(searchs)
     lens = [len(r[0]['ingredients']) for r in recipes]
     primary_len = int((0.75*sum(lens))/len(lens))
-    #print recipes[-5]
-    print recipes[-5][0]['url']
     rnames = [r[0]['name'] for r in recipes]
     metar = {
         '@type': 'Recipe',
@@ -181,7 +158,6 @@ def make_meta(searchs):
     # description 
     metar['description'] = 'Metarecipe constructed from: ' + ', '.join(rnames)
     return metar
-
 
 
 if __name__ == '__main__':
