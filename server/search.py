@@ -32,6 +32,7 @@ def get_recipes(search):
             results.append((r, score))
     sorted_r = sorted(results, key=operator.itemgetter(1))
     sorted_r.reverse()
+    print sorted_r
     i = min(len(sorted_r), 10)
     return sorted_r[:i] 
 
