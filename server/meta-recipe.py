@@ -162,6 +162,7 @@ def make_meta(searchs):
     lens = [len(r[0]['ingredients']) for r in recipes]
     primary_len = int((0.75*sum(lens))/len(lens))
     #print recipes[-5]
+    print recipes[-5][0]['url']
     rnames = [r[0]['name'] for r in recipes]
     metar = {
         '@type': 'Recipe',
@@ -174,9 +175,10 @@ def make_meta(searchs):
     all_ingreds = get_ingredients(recipes)
     metar['primaryRecipeIngredient'] = all_ingreds[:primary_len] 
     metar['variantRecipeIngredient'] = all_ingreds[primary_len:] 
-    
-    # instructions
-    # description ??
+   
+    # variants
+    metar['variants'] = [r[0]['url'] for r in recipes]  
+    # description 
     metar['description'] = 'Metarecipe constructed from: ' + ', '.join(rnames)
     return metar
 
