@@ -1,7 +1,7 @@
 # This script scrapes publicly available information and attempts to extract 
 # indidividual id. 
 
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 from json import loads, dumps
 from datetime import datetime as dt
 import sys
@@ -9,7 +9,7 @@ from os.path import abspath
 import urllib2
 import unicodedata
 import operator
-from lxml import etree
+#from lxml import etree
 import redis
 import hashlib
 
