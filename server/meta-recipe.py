@@ -5,7 +5,7 @@ import itertools
 from search import get_recipes
 from datetime import date
 import re
-import nltk
+#import nltk
 import pattern
 from collections import defaultdict
 import operator
@@ -138,7 +138,7 @@ def get_ingredients(recipes):
 
 def make_meta(searchs):
     recipes = get_recipes(searchs)
-    print recipes
+    #print recipes
     lens = [len(r[0]['ingredients']) for r in recipes]
     primary_len = int((0.75*sum(lens))/len(lens))
     rnames = [r[0]['name'] for r in recipes]
