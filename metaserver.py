@@ -23,10 +23,10 @@ def get_recipe(path):
     print(path)
     return redis.get(path)
      
-metaserver = Flask(__name__)
+app = Flask(__name__)
 
-@metaserver.route('/recipes/', methods=['GET'], defaults={'path':''})
-@metaserver.route('/recipes/<path:path>')
+@app.route('/recipes/', methods=['GET'], defaults={'path':''})
+@app.route('/recipes/<path:path>')
 def recipes(path):
     if not path:
         data = get_all_recipes()
@@ -38,7 +38,7 @@ def recipes(path):
             }
     return jsonify(**resp)
 
-@metaserver.route('/metasearch/', methods=['POST'])
+@app.route('/metasearch/', methods=['POST'])
 def metasearch():
     REQUEST = json.loads(request.data)
     data = make_meta(REQUEST['query'])
@@ -49,7 +49,7 @@ def metasearch():
     return jsonify(**resp)
 
 if __name__ == '__main__':
-    metaserver.run(host='0.0.0.0', port=5004, debug=True)
+    metaserver.run(host='0.0.0.0', port=80, debug=True)
 
 
 
