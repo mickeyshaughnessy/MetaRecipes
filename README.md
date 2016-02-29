@@ -9,8 +9,8 @@ Code for metarecipe app :shit:
 ToDo:
 - [x] build database
 - [x] searching the database
-- [ ] combine recipes into meta recipe
-- [ ] make ingredients list of length = avg length of ingredients returned
+- [x] combine recipes into meta recipe
+- [x] make ingredients list of length = avg length of ingredients returned
 - [ ] make metadirections  
 - [x] crawl for recipe urls
 - [x] REST API in front of it.
@@ -160,3 +160,4 @@ There are several components to set up.
 4. You need to start redis in a new screen (eventually we can move it to a dedicated server or cluster): `screen -d -m -S shared`, `screen -x shared`, `<ctrl + a>, c` and `redis-server`. Then a final `<ctrl + a>, n` to get back to a fresh screen.
 5. Change the redis settings so it doesn't try to write to disk (only on AWS EC2 server, should be fixed soon). `redis-cli` then `config set stop-writes-on-bgsave-error no`.  
 6. The redis needs to be filled - from the `/data/` directory, execute: `python upload_redis.py db_all.json`.
+7. To run the webserver, install apache: `sudo apt-get install apache2 apache2-base apache2-mpm-prefork apache2-utils libexpat1 ssl-cert` The `amazonaws.com.conf` file needs to be put in `/etc/apache2/sites-available` and enabled, `sudo a2ensite amazonaws.com` and you should disable the default site `sudo a2dissite 000-default`. Then reload `sudo apachectl restart`.  
