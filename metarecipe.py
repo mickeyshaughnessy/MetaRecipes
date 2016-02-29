@@ -5,7 +5,6 @@ import itertools
 from search import get_recipes
 from datetime import date
 import re
-import nltk
 import pattern
 from collections import defaultdict
 import operator
