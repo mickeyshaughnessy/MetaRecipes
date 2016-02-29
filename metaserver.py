@@ -38,10 +38,10 @@ def recipes(path):
             }
     return jsonify(**resp)
 
-@app.route('/metasearch/', methods=['POST'])
+@app.route('/metasearch/', methods=['GET'])
 def metasearch():
-    REQUEST = json.loads(request.data)
-    data = make_meta(REQUEST['query'])
+    qstring = request.args.get('qstring')
+    data = make_meta(qstring)
     resp = {
             'message':'Have a nice day with this recipe',
             'data':data
