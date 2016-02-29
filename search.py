@@ -49,7 +49,7 @@ def compute_match(search, recipe):
         # The frequency of the search terms in the description and instructions determines the score.
         # The body score is normalized by the length of the recipe body. 
     pall = re.compile('('+search.lower()+')')
-    ps = [re.compile('('+s.lower()+')') for s in search.split(' ')]
+    ps = [re.compile('('+s.lower()+' )') for s in search.split(' ')]
     #### This section to handle pluralization isn't quite working
     #if s.lower()[-1] == 's':
     #    ps2 = [re.compile('('+pattern.en.singularize(s.lower())+')') for s in search.split(' ')]
