@@ -8,7 +8,6 @@ from os.path import abspath
 up = '/'.join(abspath(".").split('/')[:-1])
 sys.path.append(up)
 from config import *
-import gensim
 import pattern
 from pattern.en import singularize, wordnet
 
