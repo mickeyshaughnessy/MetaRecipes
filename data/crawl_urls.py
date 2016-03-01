@@ -10,6 +10,7 @@ from random import shuffle, uniform
 
 seen = []
 p = re.compile('"http://allrecipes\.com/recipe.*?"')
+#p = re.compile('"http://www\.foodnetwork\.com/recipes.*?/.*?html"')
 
 def crawl(url):
     print url
@@ -20,7 +21,7 @@ def crawl(url):
     for m in matches:
         m = m.replace('"','')
         if m not in seen: 
-            with open('all_urls14.txt', 'a') as f:
+            with open('fn_urls.txt', 'a') as f:
                 f.write(m+'\n')
             crawl(m)
 
