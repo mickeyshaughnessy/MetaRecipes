@@ -16,6 +16,15 @@ ToDo:
 - [x] REST API in front of it.
 - [ ] front end for displaying the results
 - [ ] filtering the results on adjectives ('vegan', 'slow-cooker', etc)
+- [ ] images (collect and serve)
+- [ ] ingredient ratios
+- [ ] remove outliers from search results, based on ingredient commonality.
+- [ ] scrape http://cookieandkate.com/
+- [ ] scrape epicurious.
+- [ ] domain name registration.
+- [ ] standup full API server.
+- [ ] complete frontend design, including extensive flat url structure with cached metarecipes. 
+- [ ] initial SEO to establish domain authority
 
 
 #Meta Recipe Algorithm:
