@@ -24,8 +24,11 @@ redis = redis.StrictRedis(host=redis_hostname)
 def get_recipes(search):
     # returns all recipes with the search string in the name or description
     results = []
+    #y = [redis.get(k) for k in redis.keys('*recipe*')]
+    #print len(y)
     for r in [redis.get(k) for k in redis.keys('*recipe*')]:
         r = loads(r)
+        #print search, r
         score = compute_match(search, r)
         if score > 0:
             results.append((r, score))
@@ -57,8 +60,10 @@ def compute_match(search, recipe):
     #    ps2 = [re.compile('('+pattern.en.pluralize(s.lower())+')') for s in search.split(' ')]
     #ps = ps1 + ps2
     rname = recipe['name'].lower()
-    rbody = (recipe['description'] + ' ' + ' '.join(recipe['recipeInstructions'])).lower() 
-     
+    try:
+        rbody = (recipe['description'] + ' ' + ' '.join(recipe['recipeInstructions'])).lower() 
+    except:
+        rbody = recipe['description'] 
     name_score = sum([len(p.findall(rname)) for p in ps])
     body_score = 0
     #body_score = sum([model.similarity(, phrase)
