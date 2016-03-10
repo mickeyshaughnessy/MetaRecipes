@@ -19,10 +19,6 @@ def get_all_recipes():
     keys = redis.keys('*recipe*')
     return [redis.get(key) for key in keys]
 
-def get_recipe(path):
-    print(path)
-    return redis.get(path)
-     
 app = Flask(__name__)
 
 @app.route('/recipes/', methods=['GET'], defaults={'path':''})
@@ -31,7 +27,7 @@ def recipes(path):
     if not path:
         data = get_all_recipes()
     else:
-        data = get_recipe(path)
+        data = redis.get(path)
     resp = {
             'message':'Have a nice day',
             'data':data

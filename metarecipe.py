@@ -109,37 +109,30 @@ def get_ingredients(recipes):
     ingredients = [[i for i in r[0]['ingredients']] for r in recipes]
     # flatten into a single list of raw ingredient strings
     ingredients = [i for sublist in ingredients for i in sublist]
-    # extract the core ingredient string
+    # extract the core ingredient description strings
     ingredients = map(reduce_ingred, ingredients)
-    # reduce the ingredient strings to simple words and phrases 
-    #print 'pos tagging.....'
-    #t_0 = time.mktime(dt.now().timetuple())
-    #all_tags = map(nltk.pos_tag, [i.split() for i in ingredients]) 
-    #t_1 = time.mktime(dt.now().timetuple())
-    #print 'time elapsed for nltk tagger %s' % (t_1 - t_0) 
-    #t_2 = time.mktime(dt.now().timetuple())
-    #print [i.split() for i in ingredients]
+    # tag each word to identify the part of speech
     all_tags = map(pattern.en.tag, ingredients) 
-    #t_3 = time.mktime(dt.now().timetuple())
-    #print 'time elapsed for pattern tagger %s' % (t_3 - t_2)
-    # an ing in all_tags looks like: [('jar', 'NN'), ('smoked', VBD), ('sour', 'JJ'), ('apples', 'NNS')]
+    # keep only the nouns (?)
     all_words = [' '.join([w[0] for w in ing if w[1] in ['NN', 'NNS']]) for ing in all_tags]
     all_tokes = [w for phrase in all_words for w in phrase.split(' ')] 
     all_words += all_tokes
    
-    # count the basic words 
+    # count the basic words to do the sorting 
     counts = defaultdict(int)
     for w in all_words:
         counts[w] += 1
     words_sorted = sorted(counts.items(), key=operator.itemgetter(1))
     words_sorted.reverse()
+    # compound any relevant words and return the final ranked list
     return(compound([w[0] for w in words_sorted[:30] if w[0]])) 
 
 def make_meta(searchs):
     recipes = get_recipes(searchs)
     lens = [len(r[0]['ingredients']) for r in recipes]
+    # primary_len specifies the fraction of ingredients in the primary ingredients field 
     primary_len = int((0.75*sum(lens))/len(lens))
-    rnames = [r[0]['name'] for r in recipes]
+    #rnames = [r[0]['name'] for r in recipes]
     metar = {
         '@type': 'Recipe',
         'author': 'Metarecipes',
@@ -155,7 +148,7 @@ def make_meta(searchs):
     # variants
     metar['variants'] = [r[0]['url'] for r in recipes]  
     # description 
-    metar['description'] = 'Metarecipe constructed from: ' + ', '.join(rnames)
+    metar['description'] = 'Metarecipe constructed from: ' + ', '.join([r[0]['name'] for r in recipes])
     return metar
 
 

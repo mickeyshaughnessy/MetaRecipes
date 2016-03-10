@@ -71,7 +71,7 @@ if __name__ == '__main__':
                     _id = hashlib.sha224(line.strip()+data['name']).hexdigest()
                 except:
                     _id = hashlib.sha224(line.strip()).hexdigest()
-                with open('db_all.json', 'a') as f2:
+                with open('db_allrecipes.json', 'a') as f2:
                     f2.write(dumps(data)+'\n')    
                 redis.set('recipe'+_id, dumps(data))
                 

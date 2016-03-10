@@ -1,3 +1,6 @@
 [submodule "link-grammar"]
 	path = old_stuff/link-grammar
 	url = https://github.com/opencog/link-grammar.git
+[submodule "chefbot"]
+	path = chefbot
+	url = https://github.com/mickeyshaughnessy/chefbot.git

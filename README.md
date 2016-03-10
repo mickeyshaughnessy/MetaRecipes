@@ -11,7 +11,6 @@ ToDo:
 - [x] searching the database
 - [x] combine recipes into meta recipe
 - [x] make ingredients list of length = avg length of ingredients returned
-- [ ] make metadirections  
 - [x] crawl for recipe urls
 - [x] REST API in front of it.
 - [ ] front end for displaying the results
@@ -20,12 +19,13 @@ ToDo:
 - [ ] ingredient ratios
 - [ ] remove outliers from search results, based on ingredient commonality.
 - [ ] scrape http://cookieandkate.com/
+- [ ] make metadirections  
 - [ ] scrape epicurious.
 - [ ] domain name registration.
 - [ ] standup full API server.
 - [ ] complete frontend design, including extensive flat url structure with cached metarecipes. 
 - [ ] initial SEO to establish domain authority
-
+- [ ] add support for other languages
 
 #Meta Recipe Algorithm:
 
@@ -164,9 +164,15 @@ example recipe JSON LD
 # Setup
 There are several components to set up.
 1. Python / Anaconda. Use ` wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh` to conda from the command line. You need to restart your terminal session (ssh out, or open a new window) after installing conda.
+
 2. Redis. You need to install both Redis and the redis-python interface - `conda install redis-py` and `conda install redis`
+
 3. The NLP library we are currently using is pattern, its not available in anaconda so you need to `pip install pattern`
+
 4. You need to start redis in a new screen (eventually we can move it to a dedicated server or cluster): `screen -d -m -S shared`, `screen -x shared`, `<ctrl + a>, c` and `redis-server`. Then a final `<ctrl + a>, n` to get back to a fresh screen.
+
 5. Change the redis settings so it doesn't try to write to disk (only on AWS EC2 server, should be fixed soon). `redis-cli` then `config set stop-writes-on-bgsave-error no`.  
+
 6. The redis needs to be filled - from the `/data/` directory, execute: `python upload_redis.py db_all.json`.
+
 7. To run the webserver, install apache: `sudo apt-get install apache2 apache2-base apache2-mpm-prefork apache2-utils libexpat1 ssl-cert` The `amazonaws.com.conf` file needs to be put in `/etc/apache2/sites-available` and enabled, `sudo a2ensite amazonaws.com` and you should disable the default site `sudo a2dissite 000-default`. Then reload `sudo apachectl restart`.  
