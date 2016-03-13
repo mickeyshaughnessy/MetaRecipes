@@ -3,22 +3,102 @@
   <head>
     <meta charset="utf-8">
     <title>Metarecipes Home</title>
-  </head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+//http://api.jquery.com/jquery.ajax/
+var recipe;
+var localDev = true;
+var appServer = "http://ec2-54-191-165-147.us-west-2.compute.amazonaws.com/metasearch/";
+var recipeQuery = "paella";
+var defaultRecipe = {
+  "data": {
+    "@type": "Recipe", 
+    "author": "Metarecipes", 
+    "datePublished": "2016-03-13", 
+    "description": "Metarecipe constructed from: Cuban-style Paella: Paella Cubana, Paella Burgers and Spanish Fries with Pimiento Mayonnaise, Paella Style Rice, Just-Add-Water Shrimp Paella Soup, Shellfish and Chorizo Paella with Saffron and Squid Ink Rice, Paella in Quince, Paella Valencia, Mixed Seafood Paella with Thai Bird Chile Aioli, Couscous Paella with Shrimp, Paella in Quince", 
+    "name": "Meta paella", 
+    "primaryRecipeIngredient": [
+      "oil", 
+      "rice", 
+      "peas", 
+      "chorizo", 
+      "wine", 
+      "lemon", 
+      "parsley", 
+      "butter", 
+      "saffron", 
+      "mussels", 
+      "salt pepper", 
+      "paprika", 
+      "sauce", 
+      "chicken stock", 
+      "clams"
+    ], 
+    "variantRecipeIngredient": [
+      "couscous", 
+      "medium shrimp", 
+      "cloves garlic", 
+      "onions"
+    ], 
+    "variants": [
+      "http://www.foodnetwork.com/recipes/cuban-style-paella-paella-cubana-recipe.html", 
+      "http://www.foodnetwork.com/recipes/rachael-ray/paella-burgers-and-spanish-fries-with-pimiento-mayonnaise-recipe.html", 
+      "http://www.foodnetwork.com/recipes/paella-style-rice-recipe.html", 
+      "http://www.foodnetwork.com/recipes/food-network-kitchens/just-add-water-shrimp-paella-soup.html", 
+      "http://www.foodnetwork.com/recipes/bobby-flay/shellfish-and-chorizo-paella-with-saffron-and-squid-ink-rice-recipe.html", 
+      "http://www.foodnetwork.com/recipes/paella-in-quince-recipe.html", 
+      "http://www.foodnetwork.com/recipes/paella-valencia-recipe-recipe.html", 
+      "http://www.foodnetwork.com/recipes/mixed-seafood-paella-with-thai-bird-chile-aioli-recipe.html", 
+      "http://www.foodnetwork.com/recipes/couscous-paella-with-shrimp-recipe.html", 
+      "http://www.foodnetwork.com/recipes/rachael-ray/paella-in-quince-recipe.html"
+    ]
+  }, 
+  "message": "Have a nice day with this recipe"
+};
+
+function recipeDataHandler(recipe){
+  jQuery('article#main').append('<h2 class="recipe-name">'+recipe.name+'</h2>');
+  jQuery('article#main').append('<p class="description">'+recipe.description+'</p>');
+  jQuery('article#main').append('<ul id="primary" class="ingredient-list"></ul>');
+  jQuery('article#main').append('<ul id="variant" class="ingredient-list"></ul>');
+  for(ingredient in recipe.primaryRecipeIngredient){
+    jQuery('article#main #primary.ingredient-list').append('<li class="ingredient">'+ingredient+'</li>');
+  }     
+  for(ingredient in recipe.variantRecipeIngredient){
+    jQuery('article#main #variant.ingredient-list').append('<li class="ingredient">'+ingredient+'</li>');
+  }
+  return recipe;
+}
+
+jQuery(document).ready(function(){
+	
+  if(localDev){
+    recipeDataHandler(defaultRecipe);
+  }else{
+    	jQuery.ajax({
+      	url : appServer,
+      	crossDomain: "true", 
+      	data : {qstring : recipeQuery}
+    	}).done(function(data){
+    		recipe = data.data;
+    		//do stuff here to add recipe to the dom
+    		recipeDataHandler(recipe);
+    	});
+  	}
+});
+</script>
+ </head>
   <body>
     <header>
-    <h2>search bar here</h2>
+        <h1>Meta Recipes Home</h1>
+        <h2>search bar here</h2>
     </header>
-    <section>
-    <p>Image gallery with links will go here</p>
+	<article id="main"></article>
+    <section id="recipe-gallery">
+        <p>Image gallery with links will go here</p>
     </section>
-    <section>
-    <p>More... link here</p>
-    </section>
-    <section>
-      <script src="http://ads.com/ttj?id=1234" type="text/javascript"></script>
-    </section> 
     <footer>
-      <p>&copy; 2016 Michael Shaughnessy</p>
+      <p>&copy; 2016 The Brothers Shaughnessy</p>
     </footer>
   </body>
 </html>
