@@ -181,4 +181,6 @@ There are several components to set up.
 
 * The redis needs to be filled - from the `/data/` directory, execute: `python upload_redis.py db_all.json`.
 
-* To run the webserver, install apache: `sudo apt-get install apache2 apache2-base apache2-mpm-prefork apache2-utils libexpat1 ssl-cert` The `amazonaws.com.conf` file needs to be put in `/etc/apache2/sites-available` and enabled, `sudo a2ensite amazonaws.com` and you should disable the default site `sudo a2dissite 000-default`. Then reload `sudo apachectl restart`.  
+* To run the webserver, install apache: `sudo apt-get install apache2 apache2-base apache2-mpm-prefork apache2-utils libexpat1 ssl-cert` 
+* `sudo aptitude install libapache2-mod-wsgi`
+* The `amazonaws.com.conf` file needs to be put in `/etc/apache2/sites-available` and enabled, `sudo a2ensite amazonaws.com` and you should disable the default site `sudo a2dissite 000-default`. Then reload `sudo apachectl restart`.  
