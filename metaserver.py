@@ -3,6 +3,7 @@
 
 from flask import Flask
 from flask import request, jsonify
+from flask.ext.cors import CORS
 from json import loads, dumps
 import redis
 from metarecipe import make_meta
@@ -20,6 +21,7 @@ def get_all_recipes():
     return [redis.get(key) for key in keys]
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/recipes/', methods=['GET'], defaults={'path':''})
 @app.route('/recipes/<path:path>')
