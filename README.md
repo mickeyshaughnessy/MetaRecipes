@@ -163,6 +163,11 @@ example recipe JSON LD
 
 # Setup
 There are several components to set up.
+* screen: `screen -d -m -S shared`, `screen -x shared`
+* Install git: sudo `apt-get update`, `sudo apt-get install git`
+* 
+* make .github credentials and .vimrc right:  
+
 1. Python / Anaconda. Use ` wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh` to conda from the command line. You need to restart your terminal session (ssh out, or open a new window) after installing conda.
 
 2. Redis. You need to install both Redis and the redis-python interface - `conda install redis-py` and `conda install redis`
