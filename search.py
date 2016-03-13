@@ -33,8 +33,8 @@ def get_recipes(search):
     sorted_r = sorted(results, key=operator.itemgetter(1))
     sorted_r.reverse()
     i = min(len(sorted_r), 10)
-    print sorted_r[:i]
-    raw_input()
+    #print sorted_r[:i]
+    #raw_input()
     return sorted_r[:i] 
 
 def try_similarity(w1, w2):

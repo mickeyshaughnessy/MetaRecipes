@@ -1,6 +1,6 @@
 # This server runs the backend recipe service
 # It has an API - see below
-
+import sys
 from flask import Flask
 from flask import request, jsonify
 from flask.ext.cors import CORS
@@ -8,7 +8,6 @@ from json import loads, dumps
 import redis
 from metarecipe import make_meta
 
-import sys
 from os.path import abspath
 up = '/'.join(abspath(".").split('/')[:-1])
 sys.path.append(up)
@@ -22,6 +21,10 @@ def get_all_recipes():
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/')
+def hello():
+    return 'Hello World!'
 
 @app.route('/recipes/', methods=['GET'], defaults={'path':''})
 @app.route('/recipes/<path:path>')

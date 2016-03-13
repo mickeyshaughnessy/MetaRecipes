@@ -169,7 +169,7 @@ There are several components to set up.
 
 * Python / Anaconda. Use ` wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh` to conda from the command line. You need to restart your terminal session (ssh out, or open a new window) after installing conda.
 
-* Redis. You need to install both Redis and the redis-python interface - `conda install redis-py` and `conda install redis`
+* Redis. You need to install both Redis and the redis-python interface - `conda install redis-py` and `conda install redis` and `conda install flask`, `pip install -U flask-cors`
 
 * The NLP library we are currently using is pattern, its not available in anaconda so you need to `pip install pattern`
 
@@ -181,4 +181,7 @@ There are several components to set up.
 
 * The redis needs to be filled - from the `/data/` directory, execute: `python upload_redis.py db_all.json`.
 
-* To run the webserver, install apache: `sudo apt-get install apache2 apache2-base apache2-mpm-prefork apache2-utils libexpat1 ssl-cert` The `amazonaws.com.conf` file needs to be put in `/etc/apache2/sites-available` and enabled, `sudo a2ensite amazonaws.com` and you should disable the default site `sudo a2dissite 000-default`. Then reload `sudo apachectl restart`.  
+* To run the webserver, install apache: `sudo apt-get install apache2 apache2-base apache2-mpm-prefork apache2-utils libexpat1 ssl-cert` 
+* `sudo aptitude install libapache2-mod-wsgi`
+* `sudo a2enmod wsgi`
+* The `amazonaws.com.conf` file needs to be put in `/etc/apache2/sites-available` and enabled, `sudo a2ensite amazonaws.com` and you should disable the default site `sudo a2dissite 000-default`. Then reload `sudo apachectl restart` or `sudo service apache2 restart`  
