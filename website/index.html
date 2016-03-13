@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Metarecipes Home</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" >	
+	<link rel="stylesheet" href="css/app.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script>
 //http://api.jquery.com/jquery.ajax/
@@ -57,10 +59,13 @@ var defaultRecipe = {
 };
 
 function recipeDataHandler(recipe){
+  jQuery('article#main').html('');
   jQuery('article#main').append('<h2 class="recipe-name">'+recipe.name+'</h2>');
-  jQuery('article#main').append('<p class="description">'+recipe.description+'</p>');
+  jQuery('article#main').append('<h3>Primary Ingredients</h3>');
   jQuery('article#main').append('<ul id="primary" class="ingredient-list"></ul>');
+  jQuery('article#main').append('<h4>Variant Ingredients</h4>');
   jQuery('article#main').append('<ul id="variant" class="ingredient-list"></ul>');
+  jQuery('article#main').append('<p class="description">'+recipe.description+'</p>');
   $.each(recipe.primaryRecipeIngredient, function(i, ingredient){
     jQuery('article#main #primary.ingredient-list').append('<li class="ingredient">'+ingredient+'</li>');
   });
@@ -85,18 +90,37 @@ jQuery(document).ready(function(){
     		recipeDataHandler(recipe);
     	});
   	}
+   jQuery('#recipeSearchBar').submit(function(e){
+        e.preventDefault();
+        var searchString = $(this).find('input[type="text"]').val();
+        //sanitize the search input
+        searchString = searchString.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        console.log('search input santized to: ', searchString);
+        $.ajax({
+            url: appServer,
+            crossDomain: "true",
+            data : {qstring : searchString},
+
+        }).done(function(data){
+          recipe = data.data;
+          recipeDataHandler(recipe);
+        });
+   });   
+
 });
 </script>
  </head>
   <body>
-    <header>
-        <h1>Meta Recipes Home</h1>
-        <h2>search bar here</h2>
-    </header>
+	 <header>
+        	<h1>Meta Recipes Home</h1>
+        	<form id="recipeSearchBar"><input type="text" placeholder="Search for a recipe"><input type="submit" value="Search"></form>
+    	</header>
+   <div class="outer container">
 	<article id="main"></article>
     <section id="recipe-gallery">
         <p>Image gallery with links will go here</p>
     </section>
+   </div>
     <footer>
       <p>&copy; 2016 The Brothers Shaughnessy</p>
     </footer>
