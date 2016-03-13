@@ -169,7 +169,7 @@ There are several components to set up.
 
 * Python / Anaconda. Use ` wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh` to conda from the command line. You need to restart your terminal session (ssh out, or open a new window) after installing conda.
 
-* Redis. You need to install both Redis and the redis-python interface - `conda install redis-py` and `conda install redis`
+* Redis. You need to install both Redis and the redis-python interface - `conda install redis-py` and `conda install redis` and `conda install flask`
 
 * The NLP library we are currently using is pattern, its not available in anaconda so you need to `pip install pattern`
 
