@@ -175,6 +175,8 @@ There are several components to set up.
 
 * You need to start redis in a new screen (eventually we can move it to a dedicated server or cluster): `screen -d -m -S shared`, `screen -x shared`, `<ctrl + a>, c` and `redis-server`. Then a final `<ctrl + a>, n` to get back to a fresh screen.
 
+* `sudo apt-get install redis-tools`.
+
 * Change the redis settings so it doesn't try to write to disk (only on AWS EC2 server, should be fixed soon). `redis-cli` then `config set stop-writes-on-bgsave-error no`.  
 
 * The redis needs to be filled - from the `/data/` directory, execute: `python upload_redis.py db_all.json`.
