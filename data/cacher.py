@@ -4,6 +4,7 @@
 # It then writes them into the html template
 # and loads them into redis.
 
+import sys
 import redis
 from json import loads, dumps
 from collections import Counter
@@ -21,7 +22,7 @@ def get_names():
     return [loads(redis.get(k))['name'].lower().split(' ') for k in redis.keys('*recipe*')]
 
 def get_tops(names):
-    # get n_grams and dump them into a counter, using one liner above
+    # get n_grams and dump them into a counter, using one-liner above
     # and list flattening syntax.
     one_grams = Counter([i for sl in names for i in sl]).most_common(500)
     two_grams = Counter([i for sl in map(twograms, names) for i in sl]).most_common(500)
@@ -29,7 +30,16 @@ def get_tops(names):
     return one_grams, two_grams, three_grams
 
 if __name__ == '__main__':
-    names = get_names()
-    tops = get_tops(names)
-    for q in tops[0] + tops[1] + tops[2]:
-        print q[0]
+    if len(sys.argv) == 1:
+        names = get_names()
+        tops = get_tops(names)
+        tops = tops[0] + tops[1] + tops[2]
+        for q in tops:
+            print q[0]
+    else:
+        with open(sys.argv[1]) as f:
+            tops = [t.rstrip() for t in f.readlines()]
+
+    # make metarecipes
+    # make them into html
+    # upload them into redis
