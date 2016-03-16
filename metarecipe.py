@@ -11,6 +11,10 @@ import operator
 from datetime import datetime as dt
 import time
 import pprint
+import redis
+
+redis_hostname = 'localhost'
+redis = redis.StrictRedis(host=redis_hostname)
 
 # define number regexes  
 pparen = re.compile(r"\(.*\)") # gets anything in parentheses, eg "1 (11 ounce) can of beans"    
@@ -52,6 +56,9 @@ def reduce_ingred(ingredient):
     # takes an ingredient string and returns a reduced tuple
     # eg, "1 (19 ounce) can black beans, drained and rinsed" 
     # returns (1, 19 ounce can, black beans) 
+    if not ingredient:
+        return ''
+
     ingredient = ingredient.lower()
     ingredient = ingredient.split(',')[0]
     units = [
@@ -128,6 +135,11 @@ def get_ingredients(recipes):
     return(compound([w[0] for w in words_sorted[:30] if w[0]])) 
 
 def make_meta(searchs):
+    # check for cached
+    cached = redis.exists('cached:%s' % searchs)
+    if cached:
+        return redis.get('cached:%s' % searchs)
+
     recipes = get_recipes(searchs)
     lens = [len(r[0]['ingredients']) for r in recipes]
     # primary_len specifies the fraction of ingredients in the primary ingredients field 
@@ -149,6 +161,9 @@ def make_meta(searchs):
     metar['variants'] = [r[0]['url'] for r in recipes]  
     # description 
     metar['description'] = 'Metarecipe constructed from: ' + ', '.join([r[0]['name'] for r in recipes])
+    
+    redis.set('cached:%s' % searchs, metar)
+
     return metar
 
 

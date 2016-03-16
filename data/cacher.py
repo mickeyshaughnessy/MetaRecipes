@@ -8,6 +8,7 @@ import sys
 import redis
 from json import loads, dumps
 from collections import Counter
+from metarecipe import make_meta
 
 redis_hostname = 'localhost'
 redis = redis.StrictRedis(host=redis_hostname)
@@ -40,6 +41,16 @@ if __name__ == '__main__':
         with open(sys.argv[1]) as f:
             tops = [t.rstrip() for t in f.readlines()]
 
+    with open('cached.json', 'w') as fout:
+        for t in tops:
+            metar = make_meta(t) 
+            redis.set('cached:%s' % t, metar)
+            fout.write(dumps(metar)+'\n') 
+
     # make metarecipes
     # make them into html
     # upload them into redis
+
+    # apache rewrite module (turn on)
+    # rewrite rules --> take string 'with lime' into appplication query.
+    # on query, if query string is cached return cached html, else execute process and cache. 
