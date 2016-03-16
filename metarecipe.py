@@ -12,6 +12,7 @@ from datetime import datetime as dt
 import time
 import pprint
 import redis
+from json import loads, dumps
 
 redis_hostname = 'localhost'
 redis = redis.StrictRedis(host=redis_hostname)
@@ -138,7 +139,7 @@ def make_meta(searchs):
     # check for cached
     cached = redis.exists('cached:%s' % searchs)
     if cached:
-        return redis.get('cached:%s' % searchs)
+        return loads(redis.get('cached:%s' % searchs))
 
     recipes = get_recipes(searchs)
     lens = [len(r[0]['ingredients']) for r in recipes]
@@ -146,24 +147,24 @@ def make_meta(searchs):
     primary_len = int((0.75*sum(lens))/len(lens))
     #rnames = [r[0]['name'] for r in recipes]
     metar = {
-        '@type': 'Recipe',
-        'author': 'Metarecipes',
-        'datePublished': date.today().__str__()
+        "@type": 'Recipe',
+        "author": 'Metarecipes',
+        "datePublished": date.today().__str__()
     }
-    metar['name'] = 'Meta ' + searchs
+    metar["name"] = 'Meta ' + searchs
 
     # ingredients
     all_ingreds = get_ingredients(recipes)
-    metar['primaryRecipeIngredient'] = all_ingreds[:primary_len] 
-    metar['variantRecipeIngredient'] = all_ingreds[primary_len:] 
+    metar["primaryRecipeIngredient"] = all_ingreds[:primary_len] 
+    metar["variantRecipeIngredient"] = all_ingreds[primary_len:] 
    
     # variants
-    metar['variants'] = [r[0]['url'] for r in recipes]  
+    metar["variants"] = [r[0]['url'] for r in recipes]  
     # description 
-    metar['description'] = 'Metarecipe constructed from: ' + ', '.join([r[0]['name'] for r in recipes])
+    metar["description"] = 'Metarecipe constructed from: ' + ', '.join([r[0]['name'] for r in recipes])
     
-    redis.set('cached:%s' % searchs, metar)
-
+    redis.set('cached:%s' % searchs, dumps(metar))
+    
     return metar
 
 

@@ -10,6 +10,7 @@
 //http://api.jquery.com/jquery.ajax/
 var recipe;
 var localDev = true;
+//var appServer = "http://ec2-54-191-165-147.us-west-2.compute.amazonaws.com/metasearch/";
 var appServer = "http://ec2-54-191-165-147.us-west-2.compute.amazonaws.com/metasearch/";
 var recipeQuery = "paella";
 var defaultRecipe = {
@@ -76,7 +77,6 @@ return recipe;
 }
 
 jQuery(document).ready(function(){
-	
   if(localDev){
     recipeDataHandler(defaultRecipe.data);
   }else{
