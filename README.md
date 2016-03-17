@@ -100,6 +100,8 @@ provided for SEO so that Google can crawl the meta recipes.
   To install:
   `conda install redis`
   `conda install redis-py`
+  
+  To delete keys matching a pattern (say, reset the cached recipes): `redis-cli keys "cached:*" | xargs redis-cli del`
 
 ------------
 
