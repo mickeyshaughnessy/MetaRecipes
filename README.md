@@ -14,16 +14,17 @@ ToDo:
 - [x] make ingredients list of length = avg length of ingredients returned
 - [x] crawl for recipe urls
 - [x] REST API in front of it.
-- [ ] front end for displaying the results
+- [x] front end for displaying the results
 - [ ] filtering the results on adjectives ('vegan', 'slow-cooker', etc)
 - [ ] images (collect and serve)
+- [ ] switch to waitress (threaded) for API server
 - [ ] ingredient ratios
 - [ ] remove outliers from search results, based on ingredient commonality.
 - [ ] scrape http://cookieandkate.com/
 - [ ] make metadirections  
 - [ ] scrape epicurious.
-- [ ] domain name registration.
-- [ ] standup full API server.
+- [x] domain name registration.
+- [x] standup full API server.
 - [ ] complete frontend design, including extensive flat url structure with cached metarecipes. 
 - [ ] initial SEO to establish domain authority
 - [ ] add support for other languages
