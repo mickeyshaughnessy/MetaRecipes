@@ -43,7 +43,8 @@ h1{
     font-size: 1.3rem;
     margin: .05em 1em .5em 0;
     float: left;
-    color: rgba(0,0,0,.1);
+    color: rgba(0,0,0,0);
+    display: none;
 }
 h2{
     margin-top: 0;
