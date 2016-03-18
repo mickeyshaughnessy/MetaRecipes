@@ -59,6 +59,7 @@ ToDo:
 			Preheat is usually first direction.
 			There can be one or more Mixes ('mix', 'combine', 'together', 'stir',...)
 			Cooks usually follow Mixes ('cook', 'heat', 'bake', 'boil', 'hot', 'heat', ...)
+			classify a group of steps as a 'preparation'.
 
 	1. Construct meta direction template:
 	2. Determine avg number and sequence of each kind of step, ie treat each recipe step sequence as a string ("PreMixMixCookMixCookServe" = "PMMCMC"), and compute the sequence that is the smallest edit distance from all the others in the cluster.
